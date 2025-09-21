@@ -1,29 +1,25 @@
-alert("Olá Aluno, verifique sua situação")
-console.log("Mensagem")
-var resposta = prompt("Informe seu nome:")
-console.log(resposta)
+alert("Olá Aluno, verifique sua situação");
+console.log("Mensagem");
 
-var faltas = prompt("Quantas vezes você faltou?")
-var totalAulas = prompt ("Qual o total de aulas ministradas")
-var nota1 = prompt("Qual a sua primeira nota?")
-var nota2 = prompt("Qual a sua segunda nota?")
+var resposta = prompt("Informe seu nome:");
+console.log("Nome informado: " + resposta);
 
-var media = (parseFloat(nota1) + parseFloat(nota2)) / 2; //notas 1 e 2
-var porcentagem = (qnt_faltas / aulas) * 100;
+var faltas = parseInt(prompt("Quantas vezes você faltou?"));
+var totalAulas = parseInt(prompt("Qual o total de aulas ministradas?"));
+var nota1 = parseFloat(prompt("Qual a sua primeira nota?"));
+var nota2 = parseFloat(prompt("Qual a sua segunda nota?"));
 
-console.log("Sua média é " + media);
-console.log("Sua porcentagem de faltas é " + porcentagem + "%");  
-console.log("Você tem " + qnt_faltas + " faltas de um total de " + aulas + " aulas ministradas");
-console.log("Sua nota de recuperação é " + recupercao);  
+var media = (nota1 + nota2) / 2;
+var porcentagem = (faltas / totalAulas) * 100;
+
+console.log("Sua média é " + media.toFixed(2));
+console.log("Sua porcentagem de faltas é " + porcentagem.toFixed(2) + "%");  
+console.log("Você tem " + faltas + " faltas de um total de " + totalAulas + " aulas ministradas");
 
 
 // Verificar frequencia
-
 function Frequencia(faltas, totalAulas) {
-
   let percentualFaltas = (faltas / totalAulas) * 100;
-
-  
   if (percentualFaltas <= 25) {
     console.log("Aluno atende ao requisito de frequência (>= 75%).");
     return true;
@@ -33,12 +29,10 @@ function Frequencia(faltas, totalAulas) {
   }
 }
 
-verificarFrequencia(10, 40); 
-verificarFrequencia(12, 40); 
 
 // Verificar media
-function verificarMedia(P1, P2) {
-  let media = (P1 + P2) / 2;
+function verificarMedia(nota1, nota2) {
+  let media = (nota1 + nota2) / 2;
 
   if (media >= 7) {
     console.log(`Aluno aprovado! Média: ${media.toFixed(1)}`);
@@ -51,10 +45,11 @@ function verificarMedia(P1, P2) {
     return "Reprovado";
   }
 }
-// Verificar media com recuperacao
 
-function verificarMediaComRecuperacao(P1, P2, notaRecuperacao = null) {
-  let media = (P1 + P2) / 2;
+
+// Verificar media com recuperacao
+function verificarMediaComRecuperacao(nota1, nota2, notaRecuperacao = null) {
+  let media = (nota1 + nota2) / 2;
 
   if (media >= 7) {
     console.log(`Aluno aprovado! Média: ${media.toFixed(1)}`);
@@ -81,18 +76,14 @@ function verificarMediaComRecuperacao(P1, P2, notaRecuperacao = null) {
   }
 }
 
-// Programa que descreve toda a situacao do aluno
 
-function avaliarAluno(totalAulas, faltas, P1, P2, notaRecuperacao = null) {
-  // Cálculo da frequência
+// Função principal
+function avaliarAluno(totalAulas, faltas, nota1, nota2, notaRecuperacao = null) {
   let percentualFaltas = (faltas / totalAulas) * 100;
   let percentualPresenca = 100 - percentualFaltas;
-
-  // Cálculo da média
-  let media = (P1 + P2) / 2;
+  let media = (nota1 + nota2) / 2;
   let situacao = "";
 
-  // Verificação de frequência primeiro
   if (percentualPresenca < 75) {
     situacao = "Reprovado por frequência";
   } else {
@@ -101,11 +92,7 @@ function avaliarAluno(totalAulas, faltas, P1, P2, notaRecuperacao = null) {
     } else if (media >= 5 && media < 7) {
       if (notaRecuperacao !== null) {
         let novaMedia = (media + notaRecuperacao) / 2;
-        if (novaMedia >= 5) {
-          situacao = "Aprovado na recuperação";
-        } else {
-          situacao = "Reprovado na recuperação";
-        }
+        situacao = (novaMedia >= 5) ? "Aprovado na recuperação" : "Reprovado na recuperação";
       } else {
         situacao = "Recuperação pendente (nota não informada)";
       }
@@ -114,21 +101,28 @@ function avaliarAluno(totalAulas, faltas, P1, P2, notaRecuperacao = null) {
     }
   }
 
-  // Saída no console
   console.log("Número de aulas do semestre: " + totalAulas);
   console.log("Número de faltas do aluno: " + faltas);
   console.log("Percentual de presença do aluno: " + percentualPresenca.toFixed(2) + "%");
   console.log("");
-  console.log("Primeira nota: " + P1);
-  console.log("Segunda nota: " + P2);
+  console.log("Primeira nota: " + nota1);
+  console.log("Segunda nota: " + nota2);
   console.log("Nota complementar (recuperação): " + (notaRecuperacao !== null ? notaRecuperacao : "Não houve"));
   console.log("");
   console.log("Situação final do aluno: " + situacao);
 }
 
-// Exemplos de teste
-avaliarAluno(40, 8, 7, 6);            // Frequência ok, média 6.5 -> recuperação pendente
-avaliarAluno(40, 8, 7, 6, 8);         // Frequência ok, média 6.5 -> aprovado na recuperação
-avaliarAluno(40, 12, 8, 9);           // Reprovado por frequência
-avaliarAluno(40, 5, 4, 3);            // Frequência ok, média baixa -> reprovado por nota
-avaliarAluno(40, 5, 9, 8);            // Frequência ok, aprovado direto
+
+// Chamando as funções:
+Frequencia(faltas, totalAulas);
+verificarMedia(nota1, nota2);
+
+// Só se houver recuperação:
+if (media >= 5 && media < 7) {
+  var notaRecuperacao = parseFloat(prompt("Digite a nota da recuperação:"));
+  verificarMediaComRecuperacao(nota1, nota2, notaRecuperacao);
+  avaliarAluno(totalAulas, faltas, nota1, nota2, notaRecuperacao);
+} else {
+  avaliarAluno(totalAulas, faltas, nota1, nota2);
+}
+
